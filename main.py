@@ -67,6 +67,7 @@ async def on_message(message: disnake.Message):
 
 
 if __name__ == '__main__':
+    print('Discord ON')
     loop = asyncio.get_event_loop()
     loop.create_task(telegram_bot.start_telegram_bot())
     loop.create_task(

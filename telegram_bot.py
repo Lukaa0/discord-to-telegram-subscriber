@@ -9,10 +9,13 @@ import more_itertools as mit
 from tinydb import TinyDB, Query, where
 from googletrans import Translator
 import languages
+import logging
 
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+
+logging.basicConfig(filename='logs.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
 db = TinyDB("db.json")
 updater = Updater(TELEGRAM_TOKEN)
@@ -157,11 +160,12 @@ def send_message(message: disnake.Message, discord_channel_id):
                         user['user_id'], image)
 
         except Exception as ex:
-            print(ex)
+            logging.error(ex)
             continue
 
 
 async def start_telegram_bot():
+    print('Telegram ON')
     add_handlers()
     updater.start_polling()
 if __name__ == '__main__':
