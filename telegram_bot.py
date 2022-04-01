@@ -91,7 +91,7 @@ def start_callback(update: Update, context: CallbackContext) -> None:
                             "user_id": update.callback_query.from_user.id,
                             "channel_id": channel_id,
                         },
-                        query.channel_id == channel_id,
+                        query.channel_id == channel_id and query.user_id == update.callback_query.from_user.id,
                     )
                 elif btn.text != "Done":
                     users.remove(where('channel_id') == channel_id)
