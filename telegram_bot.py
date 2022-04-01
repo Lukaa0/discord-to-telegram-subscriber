@@ -15,7 +15,8 @@ load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 
-logging.basicConfig(filename='logs.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='logs.log', filemode='w',
+                    format='%(name)s - %(levelname)s - %(message)s')
 
 db = TinyDB("db.json")
 updater = Updater(TELEGRAM_TOKEN)
@@ -91,10 +92,13 @@ def start_callback(update: Update, context: CallbackContext) -> None:
                             "user_id": update.callback_query.from_user.id,
                             "channel_id": channel_id,
                         },
-                        query.channel_id == channel_id and query.user_id == update.callback_query.from_user.id,
+                        (where('channel_id') == channel_id) & (
+                            where('user_id') == update.callback_query.from_user.id),
                     )
                 elif btn.text != "Done":
-                    users.remove(where('channel_id') == channel_id)
+                    users.remove((where('channel_id') == channel_id) & (
+                        where('user_id') == update.callback_query.from_user.id))
+
         callback.answer()
 
         callback.edit_message_text('Channels added.')
