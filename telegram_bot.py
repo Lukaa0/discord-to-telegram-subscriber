@@ -1,3 +1,4 @@
+from datetime import datetime
 from email.mime import base
 import os
 import disnake
@@ -10,6 +11,7 @@ from tinydb import TinyDB, Query, where
 from googletrans import Translator
 import languages
 import logging
+import traceback
 
 load_dotenv()
 
@@ -164,7 +166,7 @@ def send_message(message: disnake.Message, discord_channel_id):
                         user['user_id'], image)
 
         except Exception as ex:
-            logging.error(ex)
+            logging.error(datetime.now().ex,traceback.format_exc())
             continue
 
 
