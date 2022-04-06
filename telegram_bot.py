@@ -166,8 +166,9 @@ def send_message(message: disnake.Message, discord_channel_id):
                         user['user_id'], image)
 
         except Exception as ex:
-            
-            logging.error(ex,traceback.format_exc())
+            logging.error('something failed: %s' % str(ex))
+            formatted_lines = traceback.format_exc().splitlines()
+            logging.error('; '.join(formatted_lines))
             continue
 
 
