@@ -59,7 +59,7 @@ def language(update: Update, context: CallbackContext) -> None:
                 value, callback_data=f"{language_prefix}{key}"))
         keyboard = []
 
-        keyboard = list(mit.chunked(buttons, 5))
+        keyboard = list(mit.chunked(buttons, 4))
 
         reply_markup = InlineKeyboardMarkup(keyboard)
 
