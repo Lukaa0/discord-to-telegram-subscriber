@@ -155,7 +155,7 @@ def send_message(message: disnake.Message, discord_channel_id):
             <pre>
 <strong>{message.channel.name}</strong>
 ---------------
-{message.embeds[0].title if message.embeds[0].title!=disnake.Embed.Empty else message.embeds[0].author}
+{message.embeds[0].title if message.embeds[0].title!=disnake.Embed.Empty else message.embeds[0].author.name}
 ---------------
 {translated_content}
 
