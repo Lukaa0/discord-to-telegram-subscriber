@@ -42,7 +42,7 @@ def start(update: Update, context: CallbackContext) -> None:
             buttons.append(InlineKeyboardButton(
                 btn_title, callback_data=f"{channel_prefix}{channel['discord_channel_id']}"))
 
-        keyboard = list(mit.chunked(buttons, 5))
+        keyboard = list(mit.chunked(buttons, 3))
         keyboard.append([InlineKeyboardButton(
             "Done", callback_data=f"{channel_prefix}200")])
 
@@ -105,6 +105,7 @@ def start_callback(update: Update, context: CallbackContext) -> None:
 
         callback.edit_message_text('Channels added.')
         return
+
     for container in update.callback_query.message.reply_markup.inline_keyboard:
         for btn in container:
             if btn.callback_data == callback.data:
@@ -154,7 +155,7 @@ def send_message(message: disnake.Message, discord_channel_id):
             <pre>
 <strong>{message.channel.name}</strong>
 ---------------
-{message.embeds[0].title}
+{message.embeds[0].title if message.embeds[0].title!=disnake.Embed.Empty else message.embeds[0].author}
 ---------------
 {translated_content}
 
