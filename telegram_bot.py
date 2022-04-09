@@ -29,42 +29,56 @@ translator = Translator()
 
 def start(update: Update, context: CallbackContext) -> None:
     if(update.message.chat_id == update.message.from_user.id):
-        discord_channels = [r for r in db.table('discord_channels')]
-        user_channels = [r for r in db.table('users')]
-        keyboard = []
-        buttons = []
-        for channel in discord_channels:
-            btn_title = channel["discord_channel_title"]
-            for user_channel in user_channels:
-                if user_channel['user_id'] == update.message.from_user.id and user_channel['channel_id'] == channel['discord_channel_id']:
-                    btn_title = f"✓{btn_title}"
-                    break
-            buttons.append(InlineKeyboardButton(
-                btn_title, callback_data=f"{channel_prefix}{channel['discord_channel_id']}"))
+        menu = [
+            [
+                InlineKeyboardButton(
+                    "Select channels", callback_data='select_channels'),
+                InlineKeyboardButton("Select a language",
+                                     callback_data='select_language'),
+            ]
+        ]
 
-        keyboard = list(mit.chunked(buttons, 3))
-        keyboard.append([InlineKeyboardButton(
-            "Done", callback_data=f"{channel_prefix}200")])
-
-        reply_markup = InlineKeyboardMarkup(keyboard)
+        reply_markup = InlineKeyboardMarkup(menu)
 
         update.message.reply_text('Please choose:', reply_markup=reply_markup)
 
 
+def channels(update: Update, context: CallbackContext) -> None:
+    discord_channels = [r for r in db.table('discord_channels')]
+    user_channels = [r for r in db.table('users')]
+    keyboard = []
+    buttons = []
+    for channel in discord_channels:
+        btn_title = channel["discord_channel_title"]
+        for user_channel in user_channels:
+            if user_channel['user_id'] == update.effective_user.id and user_channel['channel_id'] == channel['discord_channel_id']:
+                btn_title = f"✓{btn_title}"
+                break
+        buttons.append(InlineKeyboardButton(
+            btn_title, callback_data=f"{channel_prefix}{channel['discord_channel_id']}"))
+
+    keyboard = list(mit.chunked(buttons, 3))
+    keyboard.append([InlineKeyboardButton(
+        "Done", callback_data=f"{channel_prefix}200")])
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.effective_message.reply_text(
+        'Please choose:', reply_markup=reply_markup)
+
+
 def language(update: Update, context: CallbackContext) -> None:
-    if(update.message.chat_id == update.message.from_user.id):
-        buttons = []
-        for key, value in languages.LANGUAGES.items():
-            buttons.append(InlineKeyboardButton(
-                value, callback_data=f"{language_prefix}{key}"))
-        keyboard = []
+    buttons = []
+    for key, value in languages.LANGUAGES.items():
+        buttons.append(InlineKeyboardButton(
+            value, callback_data=f"{language_prefix}{key}"))
+    keyboard = []
 
-        keyboard = list(mit.chunked(buttons, 2))
+    keyboard = list(mit.chunked(buttons, 2))
 
-        reply_markup = InlineKeyboardMarkup(keyboard)
+    reply_markup = InlineKeyboardMarkup(keyboard)
 
-        update.message.reply_text(
-            'Choose a language:', reply_markup=reply_markup)
+    update.effective_message.reply_text(
+        'Choose a language:', reply_markup=reply_markup)
 
 
 def language_callback(update: Update, context: CallbackContext) -> None:
@@ -123,6 +137,10 @@ def base_callback(update: Update, context: CallbackContext) -> None:
         start_callback(update, context)
     elif callback.startswith(language_prefix):
         language_callback(update, context)
+    elif callback == "select_channels":
+        channels(update, context)
+    elif callback == "select_language":
+        language(update, context)
 
 
 def help_command(update: Update, context: CallbackContext) -> None:
@@ -133,7 +151,6 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def add_handlers():
     updater.dispatcher.add_handler(CommandHandler('start', start))
-    updater.dispatcher.add_handler(CommandHandler('language', language))
     updater.dispatcher.add_handler(CallbackQueryHandler(base_callback))
     updater.dispatcher.add_handler(CommandHandler('help', help_command))
 
