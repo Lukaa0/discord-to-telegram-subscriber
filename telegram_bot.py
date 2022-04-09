@@ -144,8 +144,13 @@ def send_message(message: disnake.Message, discord_channel_id):
     for user in users:
         try:
             if(user['channel_id'] == discord_channel_id):
-                description = message.embeds[0].description
-                image = message.embeds[0].image.url
+                if(message.embeds.count > 0):
+                    description = message.embeds[0].description
+                    image = message.embeds[0].image.url
+                else:
+                    description = message.content
+                    image = message.attachments[0].url
+
                 result = user_languages.get(
                     Query()['user_id'] == user['user_id'])
                 language_code = "en" if result is None else result['language_name']
@@ -154,8 +159,6 @@ def send_message(message: disnake.Message, discord_channel_id):
                 content = f'''
             <pre>
 <strong>{message.channel.name}</strong>
----------------
-{message.embeds[0].title if message.embeds[0].title!=disnake.Embed.Empty else message.embeds[0].author.name}
 ---------------
 {translated_content}
 
