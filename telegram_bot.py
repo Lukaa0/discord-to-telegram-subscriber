@@ -166,7 +166,7 @@ def send_message(message: disnake.Message, discord_channel_id):
                     image = message.embeds[0].image.url
                 else:
                     description = message.content
-                    image = message.attachments[0].url
+                    image = message.attachments[0].url if len(message.attachments) > 0 else None
 
                 result = user_languages.get(
                     Query()['user_id'] == user['user_id'])
@@ -182,7 +182,7 @@ def send_message(message: disnake.Message, discord_channel_id):
                 </pre>'''
                 updater.bot.send_message(
                     chat_id=user['user_id'], text=content, parse_mode=telegram.ParseMode.HTML)
-                if image is not disnake.Embed.Empty:
+                if image is not disnake.Embed.Empty or image is not None:
                     updater.bot.send_photo(
                         user['user_id'], image)
 
