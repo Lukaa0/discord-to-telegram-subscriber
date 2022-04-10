@@ -40,7 +40,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
         reply_markup = InlineKeyboardMarkup(menu)
 
-        update.message.reply_text('Please choose:', reply_markup=reply_markup)
+        update.message.reply_text('Select an action:', reply_markup=reply_markup)
 
 
 def channels(update: Update, context: CallbackContext) -> None:
@@ -62,8 +62,8 @@ def channels(update: Update, context: CallbackContext) -> None:
         "Done", callback_data=f"{channel_prefix}200")])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.effective_message.reply_text(
-        'Please choose:', reply_markup=reply_markup)
+    update.callback_query.edit_message_text(
+        'Select channels:', reply_markup=reply_markup)
 
 
 def language(update: Update, context: CallbackContext) -> None:
@@ -77,7 +77,7 @@ def language(update: Update, context: CallbackContext) -> None:
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.effective_message.reply_text(
+    update.callback_query.edit_message_text(
         'Choose a language:', reply_markup=reply_markup)
 
 
@@ -146,7 +146,7 @@ def base_callback(update: Update, context: CallbackContext) -> None:
 def help_command(update: Update, context: CallbackContext) -> None:
 
     update.message.reply_text(
-        "Use /start select channels that you want to subscribe. \n Use \language to choose the language for automatic translation")
+        "Use /start select channels that you want to subscribe.")
 
 
 def add_handlers():
