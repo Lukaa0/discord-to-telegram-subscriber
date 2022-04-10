@@ -40,7 +40,8 @@ def start(update: Update, context: CallbackContext) -> None:
 
         reply_markup = InlineKeyboardMarkup(menu)
 
-        update.message.reply_text('Select an action:', reply_markup=reply_markup)
+        update.message.reply_text(
+            'Select an action:', reply_markup=reply_markup)
 
 
 def channels(update: Update, context: CallbackContext) -> None:
@@ -166,13 +167,14 @@ def send_message(message: disnake.Message, discord_channel_id):
                     image = message.embeds[0].image.url
                 else:
                     description = message.content
-                    image = message.attachments[0].url if len(message.attachments) > 0 else None
+                    image = message.attachments[0].url if len(
+                        message.attachments) > 0 else None
 
                 result = user_languages.get(
                     Query()['user_id'] == user['user_id'])
                 language_code = "en" if result is None else result['language_name']
                 translated_content = translator.translate(
-                    description, dest=language_code).text
+                    description, src="en", dest=language_code).text
                 content = f'''
             <pre>
 <strong>{message.channel.name}</strong>
