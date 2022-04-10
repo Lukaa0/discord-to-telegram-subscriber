@@ -161,7 +161,7 @@ def send_message(message: disnake.Message, discord_channel_id):
     for user in users:
         try:
             if(user['channel_id'] == discord_channel_id):
-                if(message.embeds.count() > 0):
+                if(len(message.embeds) > 0):
                     description = message.embeds[0].description
                     image = message.embeds[0].image.url
                 else:
