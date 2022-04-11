@@ -176,14 +176,11 @@ def send_message(message: disnake.Message, discord_channel_id):
                 translated_content = translator.translate(
                     description, src="en", dest=language_code).text
                 content = f'''
-            <pre>
-<strong>{message.channel.name}</strong>
+{message.channel.name}
 ---------------
-{translated_content}
-
-                </pre>'''
+{translated_content}'''
                 updater.bot.send_message(
-                    chat_id=user['user_id'], text=content, parse_mode=telegram.ParseMode.HTML)
+                    chat_id=user['user_id'], text=content)
                 if image is not disnake.Embed.Empty or image is not None:
                     updater.bot.send_photo(
                         user['user_id'], image)
