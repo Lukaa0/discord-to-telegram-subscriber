@@ -1,8 +1,10 @@
 from datetime import datetime
 from email.mime import base
+from http.client import UNAUTHORIZED
 import os
 import disnake
 from dotenv import load_dotenv
+from numpy import isin
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 import telegram
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, CallbackContext
@@ -179,17 +181,19 @@ def send_message(message: disnake.Message, discord_channel_id):
 {message.channel.name}
 ---------------
 {translated_content}'''
+                content = content.replace("*","")
                 updater.bot.send_message(
                     chat_id=user['user_id'], text=content)
-                if image is not disnake.Embed.Empty or image is not None:
+                if isinstance(image,str):
                     updater.bot.send_photo(
                         user['user_id'], image)
 
         except Exception as ex:
-            logging.error('something failed: %s' % str(ex))
-            formatted_lines = traceback.format_exc().splitlines()
-            logging.error('; '.join(formatted_lines))
-            continue
+            if not isinstance(ex, telegram.error.Unauthorized):
+                logging.error('something failed: %s' % str(ex))
+                formatted_lines = traceback.format_exc().splitlines()
+                logging.error('; '.join(formatted_lines))
+                continue
 
 
 async def start_telegram_bot():
