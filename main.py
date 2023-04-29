@@ -42,7 +42,7 @@ async def attach(
 ):
     query = Query()
     await inter.response.defer()
-    if inter.channel_id != 958807026924924999:
+    if not guild.get_member(inter.author.id).member.permissions.administrator
         await inter.edit_original_message(content="You can't do that")
         return
 
