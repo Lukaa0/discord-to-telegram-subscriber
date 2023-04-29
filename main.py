@@ -42,7 +42,7 @@ async def attach(
 ):
     query = Query()
     await inter.response.defer()
-    if not guild.get_member(inter.author.id).member.permissions.administrator
+    if not guild.get_member(inter.author.id).member.permissions.administrator:
         await inter.edit_original_message(content="You can't do that")
         return
 
