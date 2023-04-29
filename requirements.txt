@@ -1,6 +1,6 @@
 asyncio
 disnake
-dotenv
+python-dotenv
 googletrans
 more_itertools
 numpy
