@@ -1,0 +1,8 @@
+asyncio
+disnake
+dotenv
+googletrans
+more_itertools
+numpy
+telegram
+tinydb
