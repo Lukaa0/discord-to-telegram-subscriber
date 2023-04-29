@@ -15,7 +15,7 @@ DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 db = TinyDB("db.json")
 
 discord_bot = commands.Bot(
-    command_prefix="$", sync_permissions=True, sync_commands=True
+    command_prefix="$", sync_commands=True
 )
 
 
